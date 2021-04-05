@@ -1,0 +1,365 @@
+
+
+/*Card css*/
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+    max-height: calc(100vh - 130px);
+  }
+  
+  .card-wrapper {
+    max-height: calc(100vh - 130px);
+  }
+  
+  .card {
+    border-radius: 4px;
+    border: 1px solid var(--card-border-color);
+    background-color: var(--card-background-color);
+    min-height: 40px;
+    width: 250px;
+    margin: 0 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    max-height: calc(100vh - 130px);
+    cursor: pointer;
+  }
+  
+  .card .header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    width: 100%;
+  }
+  
+  .card .header .title {
+    float: left;
+  }
+  
+  .card .header .action {
+    float: right;
+  }
+  
+  .card .header .action i {
+    border: 1px solid transparent;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .card .header .action i:hover {
+    background: var(--action-hover-color);
+  }
+  
+  .card {
+    border-radius: 4px;
+    border: 1px solid var(--card-border-color);
+    background-color: var(--card-background-color);
+    min-height: 40px;
+    width: 260px;
+    margin: 0 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-height: inherit;
+    cursor: pointer;
+  }
+  
+  .card .card-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+    width: 100%;
+  }
+  
+  .card .card-header .title {
+    float: left;
+  }
+  
+  .card .card-header a.action {
+    float: right;
+  }
+  
+  .card .card-header a.action i {
+    border: 1px solid transparent;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .card .card-header a.action i:hover {
+    background: var(--action-hover-color);
+  }
+  
+  .card .card-body {
+    max-height: calc(100vh - 100px);
+    overflow: auto;
+  }
+  
+  .card>.card-body>a.list-card {
+    border-radius: 4px;
+    border: 1px solid var(--card-border-color);
+    background-color: var(--white);
+    color: var(--task-description-color);
+    min-height: 40px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-height: inherit;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 1px 0 rgb(9 30 66 / 25%)
+  }
+  
+  .card>.card-body>a.list-card:hover {
+    background-color: var(--list-card-background-color);
+    border-bottom-color: var(--list-card-hover-color);
+  }
+  
+  .card>.card-body>a.list-card>a.action {
+    display: none;
+  }
+  
+  .card>.card-body>a.list-card:hover>a.action {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    padding: 4px 14px;
+    border-radius: 4px;
+    display: block;
+    background: var(--light-grey);
+  }
+  
+  .card>.card-body>a.list-card:hover>a.action:hover {
+    background: var(--list-card-action-hover-color);
+  }
+  
+  .card>.card-body>a.list-card>.list-card-footer {
+    height: 30px;
+    padding-top: 4px;
+  }
+  
+  .card>.card-body>a.list-card>.list-card-footer img {
+    height: 30px;
+    width: 30px;
+    border: 2px solid var(--list-card-action-hover-color);
+    border-radius: 50%;
+  }
+  
+  .card>.card-body>a.list-card>.list-card-footer .due-date {
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    padding: 0px 4px;
+    background: var(--card-background-color);
+    border-radius: 6px;
+    color: var(--task-description-color);
+  }
+  
+  .card>.card-body>a.list-card>.list-card-footer .due-date>i {
+    padding-right: 3px;
+  }
+  
+  .card>.card-body>a.list-card>.list-card-footer .priority-position {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+  }
+  
+  .card-footer {
+    margin-top: 8px;
+    position: relative;
+  }
+  
+  .card-footer .add-button {
+    border: none;
+    color: var(--grey);
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
+  }
+  
+  .card-footer>.add-data-footer {
+    height: 30px;
+    padding: 4px 0;
+  }
+  
+  .card-footer>.add-data-footer img {
+    height: 30px;
+    width: 30px;
+    border: 2px solid var(--list-card-action-hover-color);
+    border-radius: 50%;
+  }
+  
+  .card-footer>.add-data-footer .due-date {
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    padding: 0px 4px;
+    background: #dadade;
+    border-radius: 6px;
+    color: var(--task-description-color);
+  }
+  
+  .card-footer>.add-data-footer .due-date>i {
+    padding-right: 3px;
+  }
+  
+  .card-footer>.add-data-footer .priority-position {
+    position: absolute;
+    right: 12px;
+    bottom: 40px;
+  }
+  
+  .card-footer .add-button:hover {
+    background-color: var(--action-hover-color);
+  }
+  /*Card css ends*/
+  
+  
+  /*
+    Footer css
+    */
+  svg#clouds {
+    position: fixed;
+    bottom: -160px;
+    left: -230px;
+    z-index: -10;
+    width: 1920px;
+  }
+  
+  .member-list {
+    display: block;
+    border: 1px solid #c5bdbd;
+    padding: 4px;
+    margin: 8px 0;
+    background: white;
+    border-radius: 4px;
+  }
+  
+  .member-list .user-container {
+    background: #e4e0e0;
+    padding: 4px;
+    border-radius: 4px;
+    margin: 2px 0;
+    cursor: pointer;
+  }
+  
+  .member-list .user-container:hover {
+    background: #cfcccc;
+  }
+  
+  .member-list .img-container {
+    height: 30px;
+    margin: 0;
+  }
+  
+  .member-list img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+  }
+  
+  .priority-container {
+    padding: 4px 0;
+  }
+  
+  .priority-container .btn {
+    border: 1px solid #f8f8f9;
+    padding: 2px 5px;
+    background: #f8f8f9;
+    margin-right: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .priority-container .btn-wrapper:first-child .btn:hover {
+    border: 1px solid var(--green);
+    background: var(--green);
+    color: white;
+  }
+  
+  .priority-container .btn-wrapper:nth-child(2) .btn:hover {
+    border: 1px solid var(--blue);
+    background: var(--blue);
+    color: white;
+  }
+  
+  .priority-container .btn-wrapper:last-child .btn:hover {
+    border: 1px solid var(--red);
+    background: var(--red);
+    color: white;
+  }
+  
+  .priority-container .btn.low-priority {
+    background: var(--green);
+    color: white;
+  }
+  .priority-container .btn.medium-priority {
+    background: var(--blue);
+    color: white;
+  }
+  .priority-container .btn.high-priority {
+    background: var(--red);
+    color: white;
+  }
+  
+  /**Add Task Segment**/
+  .save-btn, .update-btn {
+      border: none;
+      border-radius: 4px;
+      color: #ffffff;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  .save-btn {
+    background: var(--green);
+  }
+  .update-btn {
+    background: var(--blue);
+  }
+  
+  .add{
+    padding: 4px;
+  }
+  
+  .add .assign, .add .priority, .add .due-date {
+    background: lightgray;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: small;
+  }
+  
+  .add .assign:hover,.add .priority:hover, .add .due-date:hover {
+    background: var(--blue);
+    color: white;
+  }
+  
+  .close {
+    background: #df1d1d;
+    padding: 0 3px;
+    border-radius: 50%;
+    color: white;
+  }
+  
+  .close:hover {
+    background: #8f0707;
+  }

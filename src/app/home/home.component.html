@@ -1,0 +1,511 @@
+<style>
+
+</style>
+<div class="toolbar" role="banner">
+    <div class="logo-container dz-center-flex">
+        <img width="40" alt="Angular Logo"
+            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==" />
+        Devzo
+    </div>
+
+    <div class="search-container">
+        <input id="search" type="text" class="dz-input" [(ngModel)]="searchKey" (input)="search()" placeholder="Search by message, priority and member's name....(min 3 char)">
+    </div>
+    <div class="img-container">
+        <ul>
+            <li *ngFor="let user of users.slice(0,5)" [title]="user.name">
+                <img [src]="user.picture" alt="User Pic">
+            </li>
+            <li *ngIf="users.length > 5" class="dz-center-flex extra-member" (click)="openProfileCard($event)">
+                <span class="extra-user-count">{{'+'+ (users.length - 5)}}</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="content" role="main">
+    <div class="card-container">
+        <!-- All task where card addition, search and filter operation will be performed -->
+        <div class="card-wrapper">
+            
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">All Tasks</span>
+                    <a id="task-action" class="action" href.prevent (click)="openCardActionModal($event, 'tasks')"><i
+                            class="fa fa-ellipsis-h"></i></a>
+                </div>
+                <div class="card-body">
+                    <a *ngFor="let task of tasks let i=index" [id]="'tasks-card-'+i" class="list-card dz-position-relative"
+                        href.prevent>
+                        <a class="action" (click)="openListCardActionModal($event, 'tasks', task, i)"><i
+                                class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                        <div class="list-card-details">
+                            {{ task.message }}
+                        </div>
+                        <div class="list-card-footer dz-flex w-100">
+                            <div *ngIf="task.assigned_to !== false && task.assigned_to !== ''"
+                                [title]="getMemberName(task.assigned_to)">
+                                <img [src]="getMemberPicture(task.assigned_to)">
+                            </div>
+                            <div *ngIf="task.due_date" class="dz-center-flex dz-padding-small-horizontal">
+                                <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ task.due_date
+                                    }}</span>
+                            </div>
+                            <div *ngIf="task.priority" class="dz-center-flex priority-position">
+                                <span class="priority "
+                                    [ngClass]="{'high-priority': task.priority === '3', 'medium-priority': task.priority === '2', 'low-priority': task.priority === '1'}"
+                                    [title]="task.priority === '3' ? 'High Priority' :task.priority === '2' ? 'Medium Priority': 'Low Priority'">
+                                    <i class="fa"
+                                        [ngClass]="{'fa-exclamation': task.priority === '3', 'fa-ellipsis-v': task.priority === '2', 'fa-arrow-down': task.priority === '1'}"
+                                        aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card-footer">
+                    <button *ngIf="addOrUpdate.tasks === ''" class="add-button"
+                        (click)="enableAddTask($event, 'tasks')">+Add Task</button>
+                    <div *ngIf="addOrUpdate.tasks !== ''">
+                        <h5>{{addOrUpdate.tasks === 'add' ? 'Add Task' : addOrUpdate.tasks === 'update'? 'Update Task': ''}}
+                        </h5>
+                        <div>
+                            <textarea class="dz-textarea" rows="4" [(ngModel)]="taskForm.message"
+                                placeholder="Enter task..."></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="addOrUpdate.tasks !== ''" class="add-data-footer dz-flex dz-align-center w-100">
+                        <div *ngIf="taskForm.assigned_to !== ''" [title]="getMemberName(taskForm.assigned_to)">
+                            <img [src]="getMemberPicture(taskForm.assigned_to)">
+                        </div>
+                        <div *ngIf="taskForm.due_date !== ''" class="dz-center-flex dz-padding-small-horizontal">
+                            <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ taskForm.due_date
+                                }}</span>
+                        </div>
+                        <div *ngIf="taskForm.priority !== ''" class="dz-center-flex priority-position">
+                            <span class="priority"
+                                [ngClass]="{'high-priority': taskForm.priority === '3', 'medium-priority': taskForm.priority === '2', 'low-priority': taskForm.priority === '1'}"
+                                [title]="taskForm.priority === '3' ? 'High Priority': taskForm.priority === '2' ? 'Medium Priority': 'Low Priority'">
+                                <i class="fa"
+                                    [ngClass]="{'fa-exclamation': taskForm.priority === '3', 'fa-ellipsis-v': taskForm.priority === '2', 'fa-arrow-down': taskForm.priority === '1'}"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </div>
+    
+    
+                    </div>
+                    <div *ngIf="addOrUpdate.tasks !== ''" class="dz-flex dz-align-center">
+                        <button class="save-btn" (click)="saveTask($event, 'tasks', addOrUpdate.tasks)">
+                            {{addOrUpdate.tasks === 'add' ? 'Save' : addOrUpdate.tasks === 'update'? 'Update': ''}}
+                        </button>
+                        <div class="add"><a href.prevent (click)="openMemberList($event)"><span
+                                    class="assign">Assign</span></a></div>
+                        <div class="add">
+    
+                            <a href.prevent type="datetime-local" (click)="openDateModal($event)">
+                                <span class="due-date">Due Date</span>
+                            </a>
+                        </div>
+                        <div class="add"><a href.prevent (click)="openPriorityList($event)"><span
+                                    class="priority">Priority</span></a></div>
+    
+                        <div class="close" (click)="closeAddSection('tasks')" title="close"><span>X</span></div>
+    
+                    </div>
+    
+                </div>
+            </div>
+        </div>
+        <!--High Priority Cards-->
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">High Priority Tasks</span>
+                    <a id="task-action" class="action" href.prevent (click)="openCardActionModal($event, 'high')"><i
+                            class="fa fa-ellipsis-h"></i></a>
+                </div>
+                <div class="card-body">
+                    <a *ngFor="let highPriority of highPriorityTasks let i=index" [id]="'high-card-'+i"
+                        class="list-card dz-position-relative" href.prevent>
+                        <a class="action" (click)="openListCardActionModal($event, 'high', highPriority, i)"><i
+                                class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                        <div class="list-card-details">
+                            {{ highPriority.message }}
+                        </div>
+                        <div class="list-card-footer dz-flex w-100">
+                            <div *ngIf="highPriority.assigned_to !== false && highPriority.assigned_to !== ''"
+                                [title]="getMemberName(highPriority.assigned_to)">
+                                <img [src]="getMemberPicture(highPriority.assigned_to)">
+                            </div>
+                            <div *ngIf="highPriority.due_date" class="dz-center-flex dz-padding-small-horizontal">
+                                <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{
+                                    highPriority.due_date
+                                    }}</span>
+                            </div>
+                            <div *ngIf="highPriority.priority" class="dz-center-flex priority-position">
+                                <span class="priority high-priority" title="High Priority">
+                                    <i class="fa fa-exclamation" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card-footer">
+                    <div *ngIf="addOrUpdate.high === 'update'  && activeCard.type === 'high'">
+                        <h5>Update</h5>
+                        <div>
+                            <textarea class="dz-textarea" rows="4" [(ngModel)]="taskForm.message"
+                                placeholder="Enter task..."></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="addOrUpdate.high === 'update'  && activeCard.type === 'high'" class="add-data-footer dz-flex dz-align-center w-100">
+                        <div *ngIf="taskForm.assigned_to !== ''" [title]="getMemberName(taskForm.assigned_to)">
+                            <img [src]="getMemberPicture(taskForm.assigned_to)">
+                        </div>
+                        <div *ngIf="taskForm.due_date !== ''" class="dz-center-flex dz-padding-small-horizontal">
+                            <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ taskForm.due_date
+                                }}</span>
+                        </div>
+                        <div *ngIf="taskForm.priority !== ''" class="dz-center-flex priority-position">
+                            <span class="priority"
+                                [ngClass]="{'high-priority': taskForm.priority === '3', 'medium-priority': taskForm.priority === '2', 'low-priority': taskForm.priority === '1'}"
+                                [title]="taskForm.priority === '3' ? 'High Priority': taskForm.priority === '2' ? 'Medium Priority': 'Low Priority'">
+                                <i class="fa"
+                                    [ngClass]="{'fa-exclamation': taskForm.priority === '3', 'fa-ellipsis-v': taskForm.priority === '2', 'fa-arrow-down': taskForm.priority === '1'}"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </div>
+    
+    
+                    </div>
+                    <div *ngIf="addOrUpdate.high === 'update'  && activeCard.type === 'high'" class="dz-flex dz-align-center">
+                        <button class="save-btn" (click)="saveTask($event, 'high', addOrUpdate.high)">
+                            Update
+                        </button>
+                        <div class="add"><a href.prevent (click)="openMemberList($event)"><span
+                                    class="assign">Assign</span></a></div>
+                        <div class="add">
+    
+                            <a href.prevent type="datetime-local" (click)="openDateModal($event)">
+                                <span class="due-date">Due Date</span>
+                            </a>
+                        </div>
+                        <div class="add"><a href.prevent (click)="openPriorityList($event)"><span
+                                    class="priority">Priority</span></a></div>
+    
+                        <div class="close" (click)="closeAddSection('high')" title="close"><span>X</span></div>
+    
+                    </div>
+    
+                </div>
+            </div>
+
+        </div>
+        
+
+        <!--Medium Priority card-->
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">Medium Priority Tasks</span>
+                    <a id="task-action" class="action" href.prevent (click)="openCardActionModal($event, 'medium')"><i
+                            class="fa fa-ellipsis-h"></i></a>
+                </div>
+                <div class="card-body">
+                    <a *ngFor="let mediumPriority of mediumPriorityTasks let i=index" [id]="'medium-card-'+i"
+                        class="list-card dz-position-relative" href.prevent>
+                        <a class="action" (click)="openListCardActionModal($event, 'medium', mediumPriority, i)"><i
+                                class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                        <div class="list-card-details">
+                            {{ mediumPriority.message }}
+                        </div>
+                        <div class="list-card-footer dz-flex w-100">
+                            <div *ngIf="mediumPriority.assigned_to !== false && mediumPriority.assigned_to !== ''"
+                                [title]="getMemberName(mediumPriority.assigned_to)">
+                                <img [src]="getMemberPicture(mediumPriority.assigned_to)">
+                            </div>
+                            <div *ngIf="mediumPriority.due_date" class="dz-center-flex dz-padding-small-horizontal">
+                                <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{
+                                    mediumPriority.due_date
+                                    }}</span>
+                            </div>
+                            <div *ngIf="mediumPriority.priority" class="dz-center-flex priority-position">
+                                <span class="priority medium-priority" title="Medium Priority">
+                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card-footer">
+                    <div *ngIf="addOrUpdate.medium === 'update'  && activeCard.type === 'medium'">
+                        <h5>Update</h5>
+                        <div>
+                            <textarea class="dz-textarea" rows="4" [(ngModel)]="taskForm.message"
+                                placeholder="Enter task..."></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="addOrUpdate.medium === 'update' && activeCard.type === 'medium'" class="add-data-footer dz-flex dz-align-center w-100">
+                        <div *ngIf="taskForm.assigned_to !== ''" [title]="getMemberName(taskForm.assigned_to)">
+                            <img [src]="getMemberPicture(taskForm.assigned_to)">
+                        </div>
+                        <div *ngIf="taskForm.due_date !== ''" class="dz-center-flex dz-padding-small-horizontal">
+                            <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ taskForm.due_date
+                                }}</span>
+                        </div>
+                        <div *ngIf="taskForm.priority !== ''" class="dz-center-flex priority-position">
+                            <span class="priority"
+                                [ngClass]="{'high-priority': taskForm.priority === '3', 'medium-priority': taskForm.priority === '2', 'low-priority': taskForm.priority === '1'}"
+                                [title]="taskForm.priority === '3' ? 'High Priority': taskForm.priority === '2' ? 'Medium Priority': 'Low Priority'">
+                                <i class="fa"
+                                    [ngClass]="{'fa-exclamation': taskForm.priority === '3', 'fa-ellipsis-v': taskForm.priority === '2', 'fa-arrow-down': taskForm.priority === '1'}"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </div>
+    
+    
+                    </div>
+                    <div *ngIf="addOrUpdate.medium === 'update' && activeCard.type === 'medium'" class="dz-flex dz-align-center">
+                        <button class="save-btn" (click)="saveTask($event, 'medium', addOrUpdate.medium)">
+                            Update
+                        </button>
+                        <div class="add"><a href.prevent (click)="openMemberList($event)"><span
+                                    class="assign">Assign</span></a></div>
+                        <div class="add">
+    
+                            <a href.prevent type="datetime-local" (click)="openDateModal($event)">
+                                <span class="due-date">Due Date</span>
+                            </a>
+                        </div>
+                        <div class="add"><a href.prevent (click)="openPriorityList($event)"><span
+                                    class="priority">Priority</span></a></div>
+    
+                        <div class="close" (click)="closeAddSection('medium')" title="close"><span>X</span></div>
+    
+                    </div>
+    
+                </div>
+            </div>
+
+        </div>
+        
+
+        <!-- Low Priority Card-->
+        <div class="card-wrapper">
+            <div class="card">
+                <div class="card-header">
+                    <span class="title">Low Priority Tasks</span>
+                    <a id="task-action" class="action" href.prevent (click)="openCardActionModal($event, 'low')"><i
+                            class="fa fa-ellipsis-h"></i></a>
+                </div>
+                <div class="card-body">
+                    <a *ngFor="let lowPriority of lowPriorityTasks let i=index" [id]="'low-card-'+i"
+                        class="list-card dz-position-relative" href.prevent>
+                        <a class="action" (click)="openListCardActionModal($event, 'low', lowPriority, i)"><i
+                                class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
+                        <div class="list-card-details">
+                            {{ lowPriority.message }}
+                        </div>
+                        <div class="list-card-footer dz-flex w-100">
+                            <div *ngIf="lowPriority.assigned_to !== false && lowPriority.assigned_to !== ''"
+                                [title]="getMemberName(lowPriority.assigned_to)">
+                                <img [src]="getMemberPicture(lowPriority.assigned_to)">
+                            </div>
+                            <div *ngIf="lowPriority.due_date" class="dz-center-flex dz-padding-small-horizontal">
+                                <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{
+                                    lowPriority.due_date
+                                    }}</span>
+                            </div>
+                            <div *ngIf="lowPriority.priority" class="dz-center-flex priority-position">
+                                <span class="priority low-priority" title="Low Priority">
+                                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="card-footer">
+                    <div *ngIf="addOrUpdate.low === 'update' && activeCard.type === 'low'">
+                        <h5>Update</h5>
+                        <div>
+                            <textarea class="dz-textarea" rows="4" [(ngModel)]="taskForm.message"
+                                placeholder="Enter task..."></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="addOrUpdate.low === 'update' && activeCard.type === 'low'" class="add-data-footer dz-flex dz-align-center w-100">
+                        <div *ngIf="taskForm.assigned_to !== ''" [title]="getMemberName(taskForm.assigned_to)">
+                            <img [src]="getMemberPicture(taskForm.assigned_to)">
+                        </div>
+                        <div *ngIf="taskForm.due_date !== ''" class="dz-center-flex dz-padding-small-horizontal">
+                            <span class="due-date"><i class="fa fa-clock-o" aria-hidden="true"></i>{{ taskForm.due_date
+                                }}</span>
+                        </div>
+                        <div *ngIf="taskForm.priority !== ''" class="dz-center-flex priority-position">
+                            <span class="priority"
+                                [ngClass]="{'high-priority': taskForm.priority === '3', 'medium-priority': taskForm.priority === '2', 'low-priority': taskForm.priority === '1'}"
+                                [title]="taskForm.priority === '3' ? 'High Priority': taskForm.priority === '2' ? 'Medium Priority': 'Low Priority'">
+                                <i class="fa"
+                                    [ngClass]="{'fa-exclamation': taskForm.priority === '3', 'fa-ellipsis-v': taskForm.priority === '2', 'fa-arrow-down': taskForm.priority === '1'}"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </div>
+    
+    
+                    </div>
+                    <div *ngIf="addOrUpdate.low === 'update' && activeCard.type === 'low'" class="dz-flex dz-align-center">
+                        <button class="save-btn" (click)="saveTask($event, 'low', addOrUpdate.low)">
+                            Update
+                        </button>
+                        <div class="add"><a href.prevent (click)="openMemberList($event)"><span
+                                    class="assign">Assign</span></a></div>
+                        <div class="add">
+    
+                            <a href.prevent type="datetime-local" (click)="openDateModal($event)">
+                                <span class="due-date">Due Date</span>
+                            </a>
+                        </div>
+                        <div class="add"><a href.prevent (click)="openPriorityList($event)"><span
+                                    class="priority">Priority</span></a></div>
+    
+                        <div class="close" (click)="closeAddSection('low')" title="close"><span>X</span></div>
+    
+                    </div>
+    
+                </div>
+            </div>
+    
+
+        </div>
+    </div>
+    <div>
+        <svg id="clouds" xmlns="http://www.w3.org/2000/svg" width="2611.084" height="485.677"
+            viewBox="0 0 2611.084 485.677">
+            <title>Gray Clouds Background</title>
+            <path id="Path_39" data-name="Path 39"
+                d="M2379.709,863.793c10-93-77-171-168-149-52-114-225-105-264,15-75,3-140,59-152,133-30,2.83-66.725,9.829-93.5,26.25-26.771-16.421-63.5-23.42-93.5-26.25-12-74-77-130-152-133-39-120-212-129-264-15-54.084-13.075-106.753,9.173-138.488,48.9-31.734-39.726-84.4-61.974-138.487-48.9-52-114-225-105-264,15a162.027,162.027,0,0,0-103.147,43.044c-30.633-45.365-87.1-72.091-145.206-58.044-52-114-225-105-264,15-75,3-140,59-152,133-53,5-127,23-130,83-2,42,35,72,70,86,49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33,61.112,8.015,113.854-5.72,150.492-29.764a165.62,165.62,0,0,0,110.861-3.236c47,94,178,113,251,33,31.385,4.116,60.563,2.495,86.487-3.311,25.924,5.806,55.1,7.427,86.488,3.311,73,80,204,61,251-33a165.625,165.625,0,0,0,120,0c51,13,108,15,157-5a147.188,147.188,0,0,0,33.5-18.694,147.217,147.217,0,0,0,33.5,18.694c49,20,106,18,157,5a165.625,165.625,0,0,0,120,0c47,94,178,113,251,33C2446.709,1093.793,2554.709,922.793,2379.709,863.793Z"
+                transform="translate(142.69 -634.312)" fill="#eee" />
+        </svg>
+    </div>
+</div>
+
+<!-- Card Action Modal-->
+<div id="card-action-modal" class="modal-window">
+    <div>
+        <a href.prevent title="Close" class="modal-close" (click)="closeCardActionoModal('card-action-modal')">X</a>
+        <div class="title">
+            Sort
+        </div>
+        <ul>
+            <li *ngFor="let sort of sortArr" (click)="sortTask(activeCardAction, sort.order)">
+                <span class="">{{sort.name}}</span>
+                <span *ngIf="sort.order === keys.tasks.sortKey" class="check-icon"><i class="fa fa-check"></i></span>
+            </li>
+        </ul>
+        <div *ngIf="activeCardAction === 'tasks'" class="title">
+            Filter by Priority
+        </div>
+        <ul *ngIf="activeCardAction === 'tasks'">
+            <li *ngFor="let filter of filterArr" (click)="filterTask('tasks', filter.key)">
+                <span class="">{{filter.name}}</span>
+                <span *ngIf="filter.key === keys.tasks.filterKey" class="check-icon"><i class="fa fa-check"></i></span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!--Task list Action modal -->
+<div id="list-card-action-modal" class="modal-window">
+    <div *ngIf="activeCard">
+        <a href.prevent title="Close" class="modal-close" (click)="closeListCardActionModal(activeCard.index)">X</a>
+        <div class="title">
+            Task Action
+        </div>
+        <ul>
+            <li *ngFor="let action of taskActionArr" (click)="taskAction($event, action.key, activeCard.type)">
+                <span class="">{{action.name}}</span>
+            </li>
+        </ul>
+        <div class="title">Set Priority</div>
+        <div class="priority-container dz-flex">
+            <div class="btn-wrapper">
+                <span class="btn" [ngClass]="{'low-priority': activeCard.value.priority === '1'}"
+                    (click)="setPriority('1')">Low</span>
+            </div>
+            <div class="btn-wrapper">
+                <span class="btn" [ngClass]="{'medium-priority': activeCard.value.priority === '2'}"
+                    (click)="setPriority('2')">Medium</span>
+            </div>
+            <div class="btn-wrapper">
+                <span class="btn" [ngClass]="{'high-priority': activeCard.value.priority === '3'}"
+                    (click)="setPriority('3')">High</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Member Card modal-->
+<div id="member-card-modal" class="modal-window">
+    <div>
+        <a href.prevent title="Close" class="modal-close" (click)="closeMemberCardModal()">X</a>
+        <div class="title">
+            Members
+        </div>
+        <div class="member-list">
+            <div *ngFor="let user of users" class="dz-align-center user-container"
+                (click)="assignUserToTask($event, user.id, activeCard ? activeCard.type : 'tasks' )">
+                <div class="img-container">
+                    <img [src]="user.picture">
+                </div>
+                <div>{{user.name}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Priority Card Modal -->
+<div id="priority-card-modal" class="modal-window">
+    <div>
+        <a href.prevent title="Close" class="modal-close" (click)="closePriorityCardModal()">X</a>
+        <div class="title">
+            Priority
+        </div>
+        <ul>
+            <li *ngFor="let priority of priorityArr" (click)="setPriorityToTask($event, priority.id)">
+                <span class="">{{priority.name}}</span>
+                <span *ngIf="priority.id === taskForm.priority" class="check-icon"><i class="fa fa-check"></i></span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Date Modal-->
+<div id="date-modal" class="modal-window">
+    <div class="date-modal-container">
+        <a href.prevent title="Close" class="modal-close" (click)="closeDateModal()">X</a>
+        <div class="title">
+            Select due date
+        </div>
+        <div>
+            <input class="date-input" type="datetime-local" step="2" [value]="taskForm.due_date"
+                [(ngModel)]="taskForm.due_date" (input)="setDueDate($event)">
+        </div>
+    </div>
+</div>
+
+<!-- Team Member Profile card-->
+<div id="profile-card-modal" class="modal-window">
+    <div>
+        <a href.prevent title="Close" class="modal-close" (click)="closeProfileCard()">X</a>
+        <div class="title">
+            Members
+        </div>
+        <div class="member-list">
+            <div *ngFor="let user of users" class="dz-align-center user-container">
+                <div class="img-container">
+                    <img [src]="user.picture">
+                </div>
+                <div class="user-name">{{user.name}}</div>
+            </div>
+        </div>
+    </div>
+</div>

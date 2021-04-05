@@ -1,0 +1,103 @@
+.modal-window {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.25);
+  z-index: 999;
+  transition: all 0.3s;
+  display: none;
+}
+
+/* .modal-window:target {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+} */
+
+.modal-window>div {
+  width: 165px;
+  position: absolute;
+  padding: 2em;
+  background: white;
+}
+
+
+.modal-window h1 {
+  font-size: 150%;
+  margin: 0 0 15px;
+}
+
+.modal-close {
+    color: var(--grey);
+    line-height: 33px;
+    font-size: 80%;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 6px;
+    width: 29px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.modal-close:hover {
+  color: var(--black);
+  background: var(--light-grey);
+}
+
+.modal-window>div {
+  border-radius: 1rem;
+  border: 1px solid var(--light-grey);
+}
+.modal-window>div .title {
+    font-weight: 600;
+}
+
+.modal-window ul {
+    margin: 7px 0;
+    list-style-type: none;
+    padding: 0;
+}
+.modal-window ul li {
+    cursor: pointer;
+    background: var(--card-background-color);
+    padding: 2px 4px;
+    margin: 4px 0;
+    min-height: 29px;
+    display: flex;
+    align-items: center;
+}
+.modal-window ul li .check-icon {
+    position: absolute;
+    right: 33px;
+}
+
+.modal-window ul li:hover {
+    background: var(--list-card-background-color);
+}
+
+.modal-window .date-modal-container {
+    width: 233px;
+    padding: 20px;
+}
+
+.date-input {
+    margin-top: 10px;
+    border: 1px solid #b1acac;
+    padding: 4px;
+    border-radius: 4px;
+    width: 223px;
+}
+
+
+.overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 900;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  

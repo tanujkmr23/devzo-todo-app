@@ -1,0 +1,18 @@
+:root {
+    --blue: #1976d2;
+    --white: #ffffff;
+    --black: #000000;
+    --green: #10530a;
+    --light-grey: #dad9d9;
+    --grey: #333333;
+    --red: #f44336;
+    --text-color: #666666;
+    --task-description-color: #172b4d;
+    --input-border-color: #e5e5e5;
+    --card-border-color: #eeeeee;
+    --card-background-color: #f8f8f9;
+    --list-card-background-color: #d5d5d6;
+    --list-card-hover-color: rgba(9, 30, 66, 0.25);
+    --list-card-action-hover-color: #e8e8e9;
+    --action-hover-color: #b1aaaa66;
+}
