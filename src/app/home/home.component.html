@@ -26,7 +26,7 @@
 <div class="content" role="main">
     <div class="card-container">
         <!-- All task where card addition, search and filter operation will be performed -->
-        <div class="card-wrapper">
+        <div class="card-wrapper" (drop)="dropData($event, 'all')" (dragover)="allowDrop($event)">
             
             <div class="card">
                 <div class="card-header">
@@ -35,8 +35,8 @@
                             class="fa fa-ellipsis-h"></i></a>
                 </div>
                 <div class="card-body">
-                    <a *ngFor="let task of tasks let i=index" [id]="'tasks-card-'+i" class="list-card dz-position-relative"
-                        href.prevent>
+                    <a *ngFor="let task of tasks let i=index" [id]="'all-card-'+i" class="list-card dz-position-relative"
+                        href.prevent draggable="true" (dragstart)="drag($event)">
                         <a class="action" (click)="openListCardActionModal($event, 'tasks', task, i)"><i
                                 class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                         <div class="list-card-details">
@@ -117,7 +117,7 @@
             </div>
         </div>
         <!--High Priority Cards-->
-        <div class="card-wrapper">
+        <div class="card-wrapper" (drop)="dropData($event, 'high')" (dragover)="allowDrop($event)">
             <div class="card">
                 <div class="card-header">
                     <span class="title">High Priority Tasks</span>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="card-body">
                     <a *ngFor="let highPriority of highPriorityTasks let i=index" [id]="'high-card-'+i"
-                        class="list-card dz-position-relative" href.prevent>
+                        class="list-card dz-position-relative" href.prevent draggable="true" (dragstart)="drag($event)">
                         <a class="action" (click)="openListCardActionModal($event, 'high', highPriority, i)"><i
                                 class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                         <div class="list-card-details">
@@ -204,7 +204,7 @@
         
 
         <!--Medium Priority card-->
-        <div class="card-wrapper">
+        <div class="card-wrapper" (drop)="dropData($event, 'medium')" (dragover)="allowDrop($event)">
             <div class="card">
                 <div class="card-header">
                     <span class="title">Medium Priority Tasks</span>
@@ -213,7 +213,7 @@
                 </div>
                 <div class="card-body">
                     <a *ngFor="let mediumPriority of mediumPriorityTasks let i=index" [id]="'medium-card-'+i"
-                        class="list-card dz-position-relative" href.prevent>
+                        class="list-card dz-position-relative" href.prevent draggable="true" (dragstart)="drag($event)">
                         <a class="action" (click)="openListCardActionModal($event, 'medium', mediumPriority, i)"><i
                                 class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                         <div class="list-card-details">
@@ -291,7 +291,7 @@
         
 
         <!-- Low Priority Card-->
-        <div class="card-wrapper">
+        <div class="card-wrapper" (drop)="dropData($event, 'low')" (dragover)="allowDrop($event)">
             <div class="card">
                 <div class="card-header">
                     <span class="title">Low Priority Tasks</span>
@@ -300,7 +300,7 @@
                 </div>
                 <div class="card-body">
                     <a *ngFor="let lowPriority of lowPriorityTasks let i=index" [id]="'low-card-'+i"
-                        class="list-card dz-position-relative" href.prevent>
+                        class="list-card dz-position-relative" href.prevent draggable="true" (dragstart)="drag($event)">
                         <a class="action" (click)="openListCardActionModal($event, 'low', lowPriority, i)"><i
                                 class="fa fa-ellipsis-v" aria-hidden="true"></i></a>
                         <div class="list-card-details">

@@ -582,7 +582,49 @@ export class HomeComponent implements OnInit {
   }
 
   
-
   /**Draggable JS function started */
+  /**Set Draggable priority */
+  setDraggablePriority(taskData: any): void {
+    const formData = new FormData()
+    for (var key in taskData) {
+      if (key === 'id') {
+        formData.append('taskid', taskData['id']);
+      }
+      else {
+        formData.append(key, taskData[key]);
+      }
+    }
+    this.updateTask(formData, false, 'update')
+  }
+
+  drag(event:any) {
+    var dataId = event.target.id.split('-');
+    event.dataTransfer.setData("priority", dataId[0]);
+    event.dataTransfer.setData("taskIndex", dataId[2]);
+  }
+  
+  dropData(event:any, priority:any) {
+    event.preventDefault();
+    var dragPriority = event.dataTransfer.getData("priority");
+    var taskIndex = parseInt(event.dataTransfer.getData("taskIndex"));
+    if(dragPriority !== priority) {
+      var getDragObject = dragPriority === 'all' ? this.tasks[taskIndex] 
+      : dragPriority === 'high' ? this.highPriorityTasks[taskIndex]
+      : dragPriority === 'medium' ? this.mediumPriorityTasks[taskIndex]
+      : this.lowPriorityTasks[taskIndex];
+      /**Priority will only update if we drop the element into priority segment not the All task segment. */
+      if (priority !== 'all'){
+        console.log('getDragObject : ', getDragObject);
+        getDragObject['priority'] = priority === 'high' ? '3' : priority === 'medium'? '2': '1';
+        this.setDraggablePriority(getDragObject);
+      }
+    }
+  }
+
+  allowDrop(event:any) {
+    event.preventDefault();
+  }
+
+  
 
 }
